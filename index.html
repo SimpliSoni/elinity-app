@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elinity</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        slop: {
+                            bg: '#0F0C29',
+                            dark: '#191934',
+                            purple: '#BB3DF6',
+                            blue: '#008CFF',
+                            pink: '#FF3A81',
+                            red: '#FF4141',
+                            darkblue: '#002E65',
+                            gray: '#D9D9D9',
+                        },
+                    },
+                    backgroundImage: {
+                        'gradient-slop': 'linear-gradient(to right, #BB3DF6, #008CFF, #FF3A81)',
+                    },
+                    animation: {
+                        blob: 'blob 10s infinite',
+                        shimmer: 'shimmer 2.5s linear infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' },
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            background-color: #0F0C29;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Deep Space "AI Slop" Mesh */
+        .mesh-bg {
+            background-color: #0F0C29;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(187, 61, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 140, 255, 0.15), transparent 25%),
+                radial-gradient(circle at 50% 0%, rgba(255, 58, 129, 0.1), transparent 50%),
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0F0C29;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #BB3DF6;
+            border-radius: 4px;
+        }
+
+        /* Premium Glass Effect matching Figma 4% and 5% white opacity */
+        .glass-panel {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+        }
+
+        .glass-card-hover:hover {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border-color: rgba(187, 61, 246, 0.4);
+            box-shadow: 0 0 25px rgba(187, 61, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .text-gradient-main {
+            background: linear-gradient(90deg, #BB3DF6 0%, #008CFF 50%, #FF3A81 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-gradient-purple {
+            background: linear-gradient(135deg, #BB3DF6 0%, #D9D9D9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Custom scrollbar for specific elements */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(187, 61, 246, 0.6);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(187, 61, 246, 0.8);
+        }
+
+        /* No scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

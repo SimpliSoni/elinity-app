@@ -19,7 +19,7 @@ import { Logo } from './Icons';
 
 const Sidebar = () => {
   const navItems = [
-    { icon: <Home size={22} strokeWidth={2.2} />, path: '/', id: 'home' },
+    { icon: <Home size={22} strokeWidth={2.2} />, path: '/landing', id: 'home' },
     { icon: <LayoutDashboard size={22} strokeWidth={2.2} />, path: '/dashboard', id: 'dashboard' },
     { icon: <Users size={22} strokeWidth={2.2} />, path: '/recommendations', id: 'candidates' },
     { icon: <GitCompare size={22} strokeWidth={2.2} />, path: '/compare', id: 'comparison' },

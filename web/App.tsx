@@ -1,3 +1,4 @@
+// Force refresh
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import MobileNav from './components/MobileNav';
@@ -22,7 +23,7 @@ import { usePageTitle } from './hooks/usePageTitle';
 function AppContent() {
   usePageTitle();
   const location = useLocation();
-  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
+  const isAuthPage = ['/', '/login', '/signup'].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-[#0F0C29] text-white font-sans selection:bg-[#BB3DF6] selection:text-white overflow-x-hidden mesh-bg pb-20 md:pb-0">
@@ -40,7 +41,8 @@ function AppContent() {
         <div className={!isAuthPage ? "max-w-[1600px] mx-auto px-4 md:px-8 py-8" : ""}>
           {!isAuthPage && <TopBar />}
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/recommendations" element={<CandidateRecommendations />} />
             <Route path="/compare" element={<CandidateComparison />} />

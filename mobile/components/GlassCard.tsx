@@ -6,10 +6,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 interface GlassCardProps extends ViewProps {
     className?: string;
     variant?: 'default' | 'glow' | 'solid';
+    noPadding?: boolean;
     children?: React.ReactNode;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ className = "", children, variant = "default", style, ...props }) => {
+const GlassCard: React.FC<GlassCardProps> = ({ 
+    className = "", 
+    children, 
+    variant = "default", 
+    noPadding = false,
+    style, 
+    ...props 
+}) => {
     return (
         <View className={`rounded-[24px] overflow-hidden ${className}`} style={style} {...props}>
             {/* 1. Blur Layer */}
@@ -25,7 +33,7 @@ const GlassCard: React.FC<GlassCardProps> = ({ className = "", children, variant
             <View className="absolute inset-0 border border-white/10 rounded-[24px]" pointerEvents="none" />
 
             {/* 4. Content */}
-            <View className="p-4 relative z-10">
+            <View className={`relative z-10 ${noPadding ? '' : 'p-4'}`}>
                 {children}
             </View>
         </View>

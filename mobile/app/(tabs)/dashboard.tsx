@@ -3,6 +3,7 @@ import { ScrollView, View, Text, DimensionValue } from 'react-native';
 import { Target, Users, Sparkles, Compass, MessageCircleHeart, Layers, AlertCircle, Zap } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle, G } from 'react-native-svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GlassCard from '../../components/GlassCard';
 
 // 🎨 Custom SVG Donut Chart
@@ -34,13 +35,15 @@ const DonutChart = () => {
 };
 
 const Dashboard = () => {
+    const insets = useSafeAreaInsets();
+    
     return (
         <View className="flex-1 bg-[#0F0C29]">
-            {/* 🌌 Background Blobs */}
-            <View className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] rounded-full bg-[#BB3DF6] opacity-20 blur-3xl" />
-            <View className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] rounded-full bg-[#008CFF] opacity-20 blur-3xl" />
-
-            <ScrollView className="flex-1 px-4 py-8" showsVerticalScrollIndicator={false}>
+            <ScrollView 
+                className="flex-1 px-4" 
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 100 }}
+            >
 
                 {/* --- HERO SECTION --- */}
                 <View className="mb-8 items-center mt-8">
@@ -334,9 +337,6 @@ const Dashboard = () => {
                         ))}
                     </View>
                 </View>
-
-                {/* Extra padding for tab bar */}
-                <View className="h-24" />
             </ScrollView>
         </View>
     );

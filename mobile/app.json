@@ -26,24 +26,15 @@
         "backgroundColor": "#0F0C29",
         "barStyle": "light-content"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "edgeToEdgeEnabled": false,
+      "package": "com.simplisoni.elinityapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
-      "expo-asset",
-      [
-        "react-native-edge-to-edge",
-        {
-          "android": {
-            "parentTheme": "Material3",
-            "enforceNavigationBarContrast": false
-          }
-        }
-      ]
+      "expo-asset"
     ]
   }
 }

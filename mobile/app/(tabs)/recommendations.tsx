@@ -13,6 +13,7 @@ import {
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import GlassCard from '../../components/GlassCard';
 
 const CandidateCard = ({
@@ -22,7 +23,8 @@ const CandidateCard = ({
     fitScore,
     tags,
     traits,
-    img
+    img,
+    onViewProfile
 }: {
     name: string,
     role: string,
@@ -30,7 +32,8 @@ const CandidateCard = ({
     fitScore: number,
     tags: string[],
     traits: string[],
-    img: string
+    img: string,
+    onViewProfile: () => void
 }) => (
     <GlassCard className="mb-6 p-5">
         <View className="flex-row items-start gap-4 mb-4">
@@ -81,7 +84,10 @@ const CandidateCard = ({
         </View>
 
         <View className="flex-row items-center gap-2">
-            <TouchableOpacity className="flex-1 py-2 rounded-lg bg-[#BB3DF6] items-center">
+            <TouchableOpacity 
+                onPress={onViewProfile}
+                className="flex-1 py-2 rounded-lg bg-[#BB3DF6] items-center"
+            >
                 <Text className="text-white text-xs font-bold">View Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity className="p-2 rounded-lg bg-white/5">
@@ -96,6 +102,7 @@ const CandidateCard = ({
 
 export default function Recommendations() {
     const insets = useSafeAreaInsets();
+    const router = useRouter();
     
     return (
         <View className="flex-1 bg-[#0F0C29]">
@@ -155,6 +162,7 @@ export default function Recommendations() {
                         tags={['React', 'Figma', 'Design Systems']}
                         traits={['Mission-Aligned', 'Remote-First']}
                         img="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
+                        onViewProfile={() => router.push('/(tabs)/profile')}
                     />
                     <CandidateCard
                         name="Marcus Johnson"
@@ -164,6 +172,7 @@ export default function Recommendations() {
                         tags={['Node.js', 'Python', 'AWS']}
                         traits={['Team-Player', 'Startup experience']}
                         img="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop"
+                        onViewProfile={() => router.push('/(tabs)/profile')}
                     />
                     <CandidateCard
                         name="Elena Rodriguez"
@@ -173,6 +182,7 @@ export default function Recommendations() {
                         tags={['Agile', 'Analytics', 'Strategy']}
                         traits={['Data-Driven', 'Growth focused']}
                         img="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop"
+                        onViewProfile={() => router.push('/(tabs)/profile')}
                     />
                 </View>
 

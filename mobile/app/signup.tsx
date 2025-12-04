@@ -32,7 +32,7 @@ export default function Signup() {
 
     return (
         <View className="flex-1 bg-[#0F0C29]">
-            <Stack.Screen options={{ headerShown: false, statusBarTranslucent: true }} />
+            <Stack.Screen options={{ headerShown: false }} />
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

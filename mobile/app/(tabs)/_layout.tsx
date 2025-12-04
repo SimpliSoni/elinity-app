@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { LayoutDashboard, Users, Search, GitCompare } from 'lucide-react-native';
+import { LayoutDashboard, Users, MessageCircle, Sparkles, Settings } from 'lucide-react-native';
 import { BlurView } from 'expo-blur';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -31,6 +31,7 @@ export default function TabLayout() {
                 tabBarLabelStyle: { fontSize: 10, marginBottom: 5, fontWeight: '500' },
             }}
         >
+            {/* Core Tabs - Primary Navigation */}
             <Tabs.Screen
                 name="dashboard"
                 options={{
@@ -41,11 +42,39 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="recommendations"
                 options={{
-                    title: 'Recs',
+                    title: 'Matches',
                     tabBarIcon: ({ color }) => <Users size={24} color={color} />,
                 }}
             />
-            {/* Add more screens here as you implement them */}
+            <Tabs.Screen
+                name="messages"
+                options={{
+                    title: 'Messages',
+                    tabBarIcon: ({ color }) => <MessageCircle size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="insights"
+                options={{
+                    title: 'AI',
+                    tabBarIcon: ({ color }) => <Sparkles size={24} color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: 'Settings',
+                    tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
+                }}
+            />
+            
+            {/* Hidden Tabs - Accessed via navigation, not tab bar */}
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    href: null, // Hide from tab bar
+                }}
+            />
         </Tabs>
     );
 }

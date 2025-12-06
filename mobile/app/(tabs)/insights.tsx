@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, DimensionValue } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, DimensionValue, useWindowDimensions } from 'react-native';
 import {
     Search,
     Bot,
@@ -10,9 +10,15 @@ import {
     Brain,
     Target,
     Sliders,
+    BarChart3,
+    Calendar,
+    FileText,
+    Users,
+    ChevronRight,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import GlassCard from '../../components/GlassCard';
 
 const TraitSlider = ({
@@ -62,6 +68,12 @@ const RecommendationItem = ({
 
 export default function Insights() {
     const insets = useSafeAreaInsets();
+    const router = useRouter();
+    const { width, height } = useWindowDimensions();
+    
+    // Dynamic responsive check that handles rotation
+    const isLandscape = width > height;
+    const isTablet = width > 768 || (isLandscape && width > 600);
 
     // State for trait preferences
     const [traits, setTraits] = useState({
@@ -82,14 +94,14 @@ export default function Insights() {
     });
 
     return (
-        <View className="flex-1 bg-[#0F0C29]">
+        <View style={{ flex: 1, backgroundColor: '#0F0C29' }}>
             <ScrollView
-                className="flex-1 px-4"
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 80 + insets.bottom, paddingHorizontal: 16 }}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 100 }}
             >
                 {/* Header */}
-                <View className="mb-6">
+                <View style={{ marginBottom: 24 }}>
                     <View className="flex-row items-center gap-2 mb-2">
                         <Sliders size={20} color="#BB3DF6" />
                         <Text className="text-2xl font-bold text-white">AI Insights</Text>
@@ -100,7 +112,7 @@ export default function Insights() {
                 </View>
 
                 {/* Project Candidate Pool */}
-                <GlassCard className="p-5 mb-6 bg-[#191934]/60">
+                <GlassCard style={{ marginBottom: 24 }}>
                     <View className="flex-row items-center gap-3 mb-5">
                         <View className="w-10 h-10 rounded-lg bg-[#BB3DF6]/20 items-center justify-center">
                             <Bot size={20} color="#BB3DF6" />
@@ -126,92 +138,100 @@ export default function Insights() {
                     </Text>
                 </GlassCard>
 
-                {/* Candidate Trait Preferences */}
-                <View className="mb-6">
-                    <View className="flex-row items-center gap-2 mb-4">
-                        <Target size={18} color="white" />
-                        <Text className="text-white font-bold">Candidate Trait Preferences</Text>
-                    </View>
-                    <GlassCard className="p-6 bg-[#191934]/40">
-                        <TraitSlider label="Creativity" value={traits.creativity} />
-                        <TraitSlider label="Analytical Thinking" value={traits.analytical} />
-                        <TraitSlider label="Empathy" value={traits.empathy} />
-                        <TraitSlider label="Growth Mindset" value={traits.growth} />
-                        <TraitSlider label="Leadership" value={traits.leadership} />
-                        <TraitSlider label="Adaptability" value={traits.adaptability} />
-                    </GlassCard>
-                </View>
-
-                {/* Priority Weighting Matrix */}
-                <View className="mb-6">
-                    <View className="flex-row items-center gap-2 mb-4">
-                        <Scale size={18} color="white" />
-                        <Text className="text-white font-bold">Priority Weighting</Text>
-                    </View>
-                    <GlassCard className="p-6 bg-[#191934]/40">
-                        <TraitSlider label="Values Alignment" value={weights.values} />
-                        <TraitSlider label="Technical Skills" value={weights.technical} />
-                        <TraitSlider label="Mission Alignment" value={weights.mission} />
-                        <TraitSlider label="Experience Level" value={weights.experience} />
-                    </GlassCard>
-                </View>
-
-                {/* AI Recommendations */}
-                <View className="mb-6">
-                    <View className="flex-row items-center gap-2 mb-4">
-                        <Sparkles size={18} color="#BB3DF6" />
-                        <Text className="text-white font-bold">AI Recommendations</Text>
-                    </View>
-                    <RecommendationItem
-                        icon={<TrendingUp size={16} color="#BB3DF6" />}
-                        title="Optimize for Growth Mindset"
-                        desc="Increase pool by 23% by adjusting creativity requirements"
-                    />
-                    <RecommendationItem
-                        icon={<Brain size={16} color="#BB3DF6" />}
-                        title="Skills vs Experience"
-                        desc="Consider prioritizing skills over years of experience for better matches"
-                    />
-                    <RecommendationItem
-                        icon={<Scale size={16} color="#BB3DF6" />}
-                        title="Optimal Balance"
-                        desc="Current settings provide good quality-quantity balance"
-                    />
-                </View>
-
-                {/* Match Quality Preview */}
-                <View className="mb-6">
-                    <Text className="text-white font-bold mb-4">Match Quality Preview</Text>
-                    <GlassCard className="p-5 bg-[#191934]/40">
-                        <View className="flex-row justify-between mb-4">
-                            <View className="items-center flex-1">
-                                <Text className="text-[#00FF94] text-2xl font-bold">847</Text>
-                                <Text className="text-[#D9D9D9]/60 text-[10px]">Excellent (90%+)</Text>
-                            </View>
-                            <View className="w-px bg-white/10" />
-                            <View className="items-center flex-1">
-                                <Text className="text-[#BB3DF6] text-2xl font-bold">312</Text>
-                                <Text className="text-[#D9D9D9]/60 text-[10px]">Good (80-90%)</Text>
-                            </View>
-                            <View className="w-px bg-white/10" />
-                            <View className="items-center flex-1">
-                                <Text className="text-white/60 text-2xl font-bold">88</Text>
-                                <Text className="text-[#D9D9D9]/60 text-[10px]">Fair (70-80%)</Text>
-                            </View>
+                {/* Row 1: Traits & Weights */}
+                <View style={{ gap: 24, marginBottom: 24, flexDirection: isTablet ? 'row' : 'column' }}>
+                    {/* Candidate Trait Preferences */}
+                    <View style={isTablet ? { flex: 1 } : undefined}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                            <Target size={18} color="white" />
+                            <Text className="text-white font-bold text-base">Candidate Trait Preferences</Text>
                         </View>
+                        <GlassCard style={{ flex: 1 }}>
+                            <TraitSlider label="Creativity" value={traits.creativity} />
+                            <TraitSlider label="Analytical Thinking" value={traits.analytical} />
+                            <TraitSlider label="Empathy" value={traits.empathy} />
+                            <TraitSlider label="Growth Mindset" value={traits.growth} />
+                            <TraitSlider label="Leadership" value={traits.leadership} />
+                            <TraitSlider label="Adaptability" value={traits.adaptability} />
+                        </GlassCard>
+                    </View>
 
-                        {/* Stacked Bar */}
-                        <View className="h-2 rounded-full overflow-hidden flex-row">
-                            <View className="bg-[#00FF94]" style={{ width: '68%' }} />
-                            <View className="bg-[#BB3DF6]" style={{ width: '25%' }} />
-                            <View className="bg-white/30" style={{ width: '7%' }} />
+                    {/* Priority Weighting Matrix */}
+                    <View style={isTablet ? { flex: 1 } : undefined}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                            <Scale size={18} color="white" />
+                            <Text className="text-white font-bold text-base">Priority Weighting</Text>
                         </View>
-                    </GlassCard>
+                        <GlassCard style={{ flex: 1 }}>
+                            <TraitSlider label="Values Alignment" value={weights.values} />
+                            <TraitSlider label="Technical Skills" value={weights.technical} />
+                            <TraitSlider label="Mission Alignment" value={weights.mission} />
+                            <TraitSlider label="Experience Level" value={weights.experience} />
+                        </GlassCard>
+                    </View>
+                </View>
+
+                {/* Row 2: Recommendations & Match Quality */}
+                <View style={{ gap: 24, marginBottom: 24, flexDirection: isTablet ? 'row' : 'column' }}>
+                    {/* AI Recommendations */}
+                    <View style={isTablet ? { flex: 1 } : undefined}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                            <Sparkles size={18} color="#BB3DF6" />
+                            <Text className="text-white font-bold text-base">AI Recommendations</Text>
+                        </View>
+                        <View style={{ gap: 12 }}>
+                            <RecommendationItem
+                                icon={<TrendingUp size={16} color="#BB3DF6" />}
+                                title="Optimize for Growth Mindset"
+                                desc="Increase pool by 23% by adjusting creativity requirements"
+                            />
+                            <RecommendationItem
+                                icon={<Brain size={16} color="#BB3DF6" />}
+                                title="Skills vs Experience"
+                                desc="Consider prioritizing skills over years of experience for better matches"
+                            />
+                            <RecommendationItem
+                                icon={<Scale size={16} color="#BB3DF6" />}
+                                title="Optimal Balance"
+                                desc="Current settings provide good quality-quantity balance"
+                            />
+                        </View>
+                    </View>
+
+                    {/* Match Quality Preview */}
+                    <View style={isTablet ? { flex: 1 } : undefined}>
+                        <Text className="text-white font-bold mb-4">Match Quality Preview</Text>
+                        <GlassCard className="p-5 bg-[#191934]/40">
+                            <View className="flex-row justify-between mb-4">
+                                <View className="items-center flex-1">
+                                    <Text className="text-[#00FF94] text-2xl font-bold">847</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Excellent (90%+)</Text>
+                                </View>
+                                <View className="w-px bg-white/10" />
+                                <View className="items-center flex-1">
+                                    <Text className="text-[#BB3DF6] text-2xl font-bold">312</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Good (80-90%)</Text>
+                                </View>
+                                <View className="w-px bg-white/10" />
+                                <View className="items-center flex-1">
+                                    <Text className="text-white/60 text-2xl font-bold">88</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Fair (70-80%)</Text>
+                                </View>
+                            </View>
+
+                            {/* Stacked Bar */}
+                            <View className="h-2 rounded-full overflow-hidden flex-row">
+                                <View className="bg-[#00FF94]" style={{ width: '68%' }} />
+                                <View className="bg-[#BB3DF6]" style={{ width: '25%' }} />
+                                <View className="bg-white/30" style={{ width: '7%' }} />
+                            </View>
+                        </GlassCard>
+                    </View>
                 </View>
 
                 {/* Action Buttons */}
-                <View className="gap-3 mb-8">
-                    <TouchableOpacity className="overflow-hidden rounded-xl">
+                <View className={`gap-3 mb-8 ${isTablet ? 'flex-row' : ''}`}>
+                    <TouchableOpacity className={`overflow-hidden rounded-xl ${isTablet ? 'flex-1' : ''}`}>
                         <LinearGradient
                             colors={['#BB3DF6', '#2954FF']}
                             start={{ x: 0, y: 0 }}
@@ -222,10 +242,80 @@ export default function Insights() {
                             <Text className="text-white font-bold text-base">Find Candidates</Text>
                         </LinearGradient>
                     </TouchableOpacity>
-                    <TouchableOpacity className="py-4 rounded-xl bg-[#2A2A45] border border-white/5 flex-row items-center justify-center gap-2">
+                    <TouchableOpacity className={`py-4 rounded-xl bg-[#2A2A45] border border-white/5 flex-row items-center justify-center gap-2 ${isTablet ? 'flex-1' : ''}`}>
                         <Save size={18} color="white" />
                         <Text className="text-white font-bold text-base">Save Profile</Text>
                     </TouchableOpacity>
+                </View>
+
+                {/* Quick Links to Other Features */}
+                <View className="mb-8">
+                    <Text className="text-white font-bold mb-4">Quick Actions</Text>
+                    <View className={`${isTablet ? 'flex-row flex-wrap' : ''} gap-3`}>
+                        <TouchableOpacity 
+                            onPress={() => router.push('/analytics')}
+                            className={`p-4 rounded-xl bg-[#191934]/60 border border-white/5 flex-row items-center justify-between ${isTablet ? 'flex-1 min-w-[200px]' : ''}`}
+                        >
+                            <View className="flex-row items-center gap-3">
+                                <View className="w-10 h-10 rounded-xl bg-[#BB3DF6]/20 items-center justify-center">
+                                    <BarChart3 size={18} color="#BB3DF6" />
+                                </View>
+                                <View>
+                                    <Text className="text-white font-bold text-sm">Analytics</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Match quality & trends</Text>
+                                </View>
+                            </View>
+                            <ChevronRight size={16} color="rgba(255,255,255,0.4)" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            onPress={() => router.push('/calendar')}
+                            className={`p-4 rounded-xl bg-[#191934]/60 border border-white/5 flex-row items-center justify-between ${isTablet ? 'flex-1 min-w-[200px]' : ''}`}
+                        >
+                            <View className="flex-row items-center gap-3">
+                                <View className="w-10 h-10 rounded-xl bg-[#2954FF]/20 items-center justify-center">
+                                    <Calendar size={18} color="#2954FF" />
+                                </View>
+                                <View>
+                                    <Text className="text-white font-bold text-sm">Calendar</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Schedule interviews</Text>
+                                </View>
+                            </View>
+                            <ChevronRight size={16} color="rgba(255,255,255,0.4)" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            onPress={() => router.push('/tests/builder')}
+                            className={`p-4 rounded-xl bg-[#191934]/60 border border-white/5 flex-row items-center justify-between ${isTablet ? 'flex-1 min-w-[200px]' : ''}`}
+                        >
+                            <View className="flex-row items-center gap-3">
+                                <View className="w-10 h-10 rounded-xl bg-[#FF3A81]/20 items-center justify-center">
+                                    <FileText size={18} color="#FF3A81" />
+                                </View>
+                                <View>
+                                    <Text className="text-white font-bold text-sm">Test Builder</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Create assessments</Text>
+                                </View>
+                            </View>
+                            <ChevronRight size={16} color="rgba(255,255,255,0.4)" />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            onPress={() => router.push('/compare')}
+                            className={`p-4 rounded-xl bg-[#191934]/60 border border-white/5 flex-row items-center justify-between ${isTablet ? 'flex-1 min-w-[200px]' : ''}`}
+                        >
+                            <View className="flex-row items-center gap-3">
+                                <View className="w-10 h-10 rounded-xl bg-[#00C2FF]/20 items-center justify-center">
+                                    <Users size={18} color="#00C2FF" />
+                                </View>
+                                <View>
+                                    <Text className="text-white font-bold text-sm">Compare</Text>
+                                    <Text className="text-[#D9D9D9]/60 text-[10px]">Compare candidates</Text>
+                                </View>
+                            </View>
+                            <ChevronRight size={16} color="rgba(255,255,255,0.4)" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </View>

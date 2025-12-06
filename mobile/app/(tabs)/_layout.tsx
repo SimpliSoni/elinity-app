@@ -1,17 +1,36 @@
 import { Tabs } from 'expo-router';
 import { LayoutDashboard, Users, MessageCircle, Sparkles, Settings } from 'lucide-react-native';
 import { BlurView } from 'expo-blur';
-import { View } from 'react-native';
+import { View, useWindowDimensions, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
     const insets = useSafeAreaInsets();
+    const { width, height } = useWindowDimensions();
     
+    // Dynamic responsive check that handles rotation
+    const isLandscape = width > height;
+    const isTablet = width > 768 || (isLandscape && width > 600);
+
     return (
         <Tabs
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: {
+                tabBarStyle: isTablet ? {
+                    position: 'absolute',
+                    bottom: 24,
+                    left: (width - 400) / 2,
+                    width: 400,
+                    height: 64,
+                    borderRadius: 32,
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    backgroundColor: '#1A1832',
+                    elevation: 0,
+                    paddingBottom: 0,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                } : {
                     position: 'absolute',
                     bottom: 0,
                     left: 0,
@@ -24,11 +43,27 @@ export default function TabLayout() {
                     backgroundColor: 'transparent',
                 },
                 tabBarBackground: () => (
-                    <BlurView intensity={80} tint="dark" style={{ flex: 1, backgroundColor: 'rgba(15, 12, 41, 0.9)' }} />
+                    isTablet ? null : (
+                        <BlurView intensity={80} tint="dark" style={{ flex: 1, backgroundColor: 'rgba(15, 12, 41, 0.9)' }} />
+                    )
                 ),
                 tabBarActiveTintColor: '#BB3DF6',
                 tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.4)',
-                tabBarLabelStyle: { fontSize: 10, marginBottom: 5, fontWeight: '500' },
+                tabBarLabelStyle: {
+                    fontSize: 10,
+                    marginBottom: isTablet ? 0 : 5,
+                    fontWeight: '500',
+                    display: isTablet ? 'none' : 'flex'
+                },
+                tabBarItemStyle: isTablet ? {
+                    height: 64,
+                    paddingVertical: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                } : undefined,
+                tabBarIconStyle: isTablet ? {
+                    marginBottom: 0,
+                } : undefined
             }}
         >
             {/* Core Tabs - Primary Navigation */}
@@ -67,7 +102,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <Settings size={24} color={color} />,
                 }}
             />
-            
+
             {/* Hidden Tabs - Accessed via navigation, not tab bar */}
             <Tabs.Screen
                 name="profile"

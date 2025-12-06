@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, DimensionValue } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, DimensionValue, useWindowDimensions } from 'react-native';
 import {
     Mail,
     Bookmark,
@@ -103,13 +103,18 @@ const StatBox = ({ label, value }: { label: string; value: string }) => (
 export default function CandidateProfile() {
     const insets = useSafeAreaInsets();
     const router = useRouter();
+    const { width, height } = useWindowDimensions();
+    
+    // Dynamic responsive check that handles rotation
+    const isLandscape = width > height;
+    const isTablet = width > 768 || (isLandscape && width > 600);
 
     return (
-        <View className="flex-1 bg-[#0F0C29]">
+        <View style={{ flex: 1, backgroundColor: '#0F0C29' }}>
             <ScrollView
-                className="flex-1"
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingBottom: 80 + insets.bottom }}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 100 }}
             >
                 {/* Header */}
                 <View
@@ -209,140 +214,152 @@ export default function CandidateProfile() {
                         </View>
                     </GlassCard>
 
-                    {/* Professional Summary */}
-                    <View className="mb-6">
-                        <Text className="text-white font-bold text-sm mb-3">Professional Summary</Text>
-                        <GlassCard className="p-5 bg-[#191934]/40">
-                            <Text className="text-[#D9D9D9]/80 text-xs leading-relaxed">
-                                Seasoned full-stack engineer with 8+ years of experience building
-                                scalable web applications. Proven track record of leading technical
-                                initiatives, mentoring junior developers, and driving innovation in
-                                fast-paced startup environments. Passionate about clean code, user
-                                experience, and building products that make a meaningful impact.
-                            </Text>
-                        </GlassCard>
-                    </View>
+                    {/* Row 1: Professional Summary & Career History */}
+                    <View className={`gap-6 mb-6 ${isTablet ? 'flex-row' : ''}`}>
+                        {/* Professional Summary */}
+                        <View style={isTablet ? { flex: 1 } : undefined}>
+                            <Text className="text-white font-bold text-sm mb-3">Professional Summary</Text>
+                            <GlassCard className="p-5 bg-[#191934]/40 h-full">
+                                <Text className="text-[#D9D9D9]/80 text-xs leading-relaxed">
+                                    Seasoned full-stack engineer with 8+ years of experience building
+                                    scalable web applications. Proven track record of leading technical
+                                    initiatives, mentoring junior developers, and driving innovation in
+                                    fast-paced startup environments. Passionate about clean code, user
+                                    experience, and building products that make a meaningful impact.
+                                </Text>
+                            </GlassCard>
+                        </View>
 
-                    {/* Career History */}
-                    <View className="mb-6">
-                        <Text className="text-white font-bold text-sm mb-3">Career History</Text>
-                        <HistoryItem
-                            role="Senior Full-Stack Engineer"
-                            company="TechFlow Inc."
-                            date="2021-Present"
-                            desc="Leading frontend architecture and mentoring a team of 5 developers."
-                            tags={['React', 'Node.js', 'AWS', 'Team Leadership']}
-                        />
-                        <HistoryItem
-                            role="Full-Stack Developer"
-                            company="Joova AI"
-                            date="2018-2021"
-                            desc="Built MVP from ground up, scaling from 0 to 10k users. Implemented real-time features."
-                            tags={['Vue.js', 'Python', 'PostgreSQL']}
-                        />
-                        <HistoryItem
-                            role="Software Developer"
-                            company="Digital Solutions Corp"
-                            date="2017-2018"
-                            desc="Developed client-facing web applications and internal tools."
-                            tags={['Java', 'MySQL', 'JavaScript']}
-                        />
+                        {/* Career History */}
+                        <View style={isTablet ? { flex: 1 } : undefined}>
+                            <Text className="text-white font-bold text-sm mb-3">Career History</Text>
+                            <View>
+                                <HistoryItem
+                                    role="Senior Full-Stack Engineer"
+                                    company="TechFlow Inc."
+                                    date="2021-Present"
+                                    desc="Leading frontend architecture and mentoring a team of 5 developers."
+                                    tags={['React', 'Node.js', 'AWS', 'Team Leadership']}
+                                />
+                                <HistoryItem
+                                    role="Full-Stack Developer"
+                                    company="Joova AI"
+                                    date="2018-2021"
+                                    desc="Built MVP from ground up, scaling from 0 to 10k users. Implemented real-time features."
+                                    tags={['Vue.js', 'Python', 'PostgreSQL']}
+                                />
+                                <HistoryItem
+                                    role="Software Developer"
+                                    company="Digital Solutions Corp"
+                                    date="2017-2018"
+                                    desc="Developed client-facing web applications and internal tools."
+                                    tags={['Java', 'MySQL', 'JavaScript']}
+                                />
+                            </View>
+                        </View>
                     </View>
 
                     {/* Skills & Expertise */}
                     <View className="mb-6">
                         <Text className="text-white font-bold text-sm mb-3">Skills & Expertise</Text>
-                        <View className="gap-4">
-                            <GlassCard className="p-5 bg-[#191934]/40">
-                                <Text className="text-white font-bold text-xs mb-4">
-                                    Technical Skills
-                                </Text>
-                                <SkillBar label="JavaScript / TypeScript" level="Expert" />
-                                <SkillBar label="React / Next.js" level="Expert" />
-                                <SkillBar label="Node.js / Express" level="Advanced" />
-                                <SkillBar label="AWS / Cloud Architecture" level="Advanced" />
-                            </GlassCard>
-                            <GlassCard className="p-5 bg-[#191934]/40">
-                                <Text className="text-white font-bold text-xs mb-4">Soft Skills</Text>
-                                <SkillBar
-                                    label="Team Leadership"
-                                    level="Excellent"
-                                    color={['#2954FF', '#BB3DF6']}
-                                />
-                                <SkillBar
-                                    label="Communication"
-                                    level="Excellent"
-                                    color={['#2954FF', '#BB3DF6']}
-                                />
-                                <SkillBar
-                                    label="Problem Solving"
-                                    level="Excellent"
-                                    color={['#2954FF', '#BB3DF6']}
-                                />
-                                <SkillBar
-                                    label="Mentoring"
-                                    level="Expert"
-                                    color={['#2954FF', '#BB3DF6']}
-                                />
-                            </GlassCard>
+                        <View className={`gap-4 ${isTablet ? 'flex-row' : ''}`}>
+                            <View style={isTablet ? { flex: 1 } : undefined}>
+                                <GlassCard className="p-5 bg-[#191934]/40 h-full">
+                                    <Text className="text-white font-bold text-xs mb-4">
+                                        Technical Skills
+                                    </Text>
+                                    <SkillBar label="JavaScript / TypeScript" level="Expert" />
+                                    <SkillBar label="React / Next.js" level="Expert" />
+                                    <SkillBar label="Node.js / Express" level="Advanced" />
+                                    <SkillBar label="AWS / Cloud Architecture" level="Advanced" />
+                                </GlassCard>
+                            </View>
+                            <View style={isTablet ? { flex: 1 } : undefined}>
+                                <GlassCard className="p-5 bg-[#191934]/40 h-full">
+                                    <Text className="text-white font-bold text-xs mb-4">Soft Skills</Text>
+                                    <SkillBar
+                                        label="Team Leadership"
+                                        level="Excellent"
+                                        color={['#2954FF', '#BB3DF6']}
+                                    />
+                                    <SkillBar
+                                        label="Communication"
+                                        level="Excellent"
+                                        color={['#2954FF', '#BB3DF6']}
+                                    />
+                                    <SkillBar
+                                        label="Problem Solving"
+                                        level="Excellent"
+                                        color={['#2954FF', '#BB3DF6']}
+                                    />
+                                    <SkillBar
+                                        label="Mentoring"
+                                        level="Expert"
+                                        color={['#2954FF', '#BB3DF6']}
+                                    />
+                                </GlassCard>
+                            </View>
                         </View>
                     </View>
 
-                    {/* Personality Traits */}
-                    <View className="mb-6">
-                        <Text className="text-white font-bold text-sm mb-3">Personality Traits</Text>
-                        <GlassCard className="p-5 bg-[#191934]/40">
-                            <Text className="text-white font-bold text-xs mb-4">
-                                Emotional Intelligence Score
-                            </Text>
-                            <View className="items-center mb-4">
-                                <View className="flex-row items-end">
-                                    <Text className="text-3xl font-bold text-white">8.7</Text>
-                                    <Text className="text-[#D9D9D9]/60 text-sm mb-1"> / 10</Text>
-                                </View>
-                                <Text className="text-[#BB3DF6] text-[10px]">Exceptional EQ</Text>
-                            </View>
-                            <View className="gap-3">
-                                <View className="flex-row justify-between items-center">
-                                    <Text className="text-[#D9D9D9] text-[10px]">Self-Awareness</Text>
-                                    <Text className="text-white text-[10px] font-bold">9.2</Text>
-                                </View>
-                                <View className="flex-row justify-between items-center">
-                                    <Text className="text-[#D9D9D9] text-[10px]">Empathy</Text>
-                                    <Text className="text-white text-[10px] font-bold">8.5</Text>
-                                </View>
-                                <View className="flex-row justify-between items-center">
-                                    <Text className="text-[#D9D9D9] text-[10px]">Social Skills</Text>
-                                    <Text className="text-white text-[10px] font-bold">8.4</Text>
-                                </View>
-                            </View>
-                        </GlassCard>
-                    </View>
-
-                    {/* Work Style */}
-                    <View className="mb-6">
-                        <Text className="text-white font-bold text-sm mb-3">Work Style Preferences</Text>
-                        <GlassCard className="p-5 bg-[#191934]/40">
-                            <View className="flex-row flex-wrap gap-2">
-                                {[
-                                    'Remote-First',
-                                    'Async Communication',
-                                    'Collaborative',
-                                    'Autonomous',
-                                    'Result-Oriented',
-                                    'Mentorship-Focused',
-                                ].map((style, i) => (
-                                    <View
-                                        key={i}
-                                        className="px-3 py-2 rounded-lg bg-[#BB3DF6]/10 border border-[#BB3DF6]/20"
-                                    >
-                                        <Text className="text-[#BB3DF6] text-xs font-medium">
-                                            {style}
-                                        </Text>
+                    {/* Row 2: Traits & Work Style */}
+                    <View className={`gap-6 mb-6 ${isTablet ? 'flex-row' : ''}`}>
+                        {/* Personality Traits */}
+                        <View style={isTablet ? { flex: 1 } : undefined}>
+                            <Text className="text-white font-bold text-sm mb-3">Personality Traits</Text>
+                            <GlassCard className="p-5 bg-[#191934]/40 h-full">
+                                <Text className="text-white font-bold text-xs mb-4">
+                                    Emotional Intelligence Score
+                                </Text>
+                                <View className="items-center mb-4">
+                                    <View className="flex-row items-end">
+                                        <Text className="text-3xl font-bold text-white">8.7</Text>
+                                        <Text className="text-[#D9D9D9]/60 text-sm mb-1"> / 10</Text>
                                     </View>
-                                ))}
-                            </View>
-                        </GlassCard>
+                                    <Text className="text-[#BB3DF6] text-[10px]">Exceptional EQ</Text>
+                                </View>
+                                <View className="gap-3">
+                                    <View className="flex-row justify-between items-center">
+                                        <Text className="text-[#D9D9D9] text-[10px]">Self-Awareness</Text>
+                                        <Text className="text-white text-[10px] font-bold">9.2</Text>
+                                    </View>
+                                    <View className="flex-row justify-between items-center">
+                                        <Text className="text-[#D9D9D9] text-[10px]">Empathy</Text>
+                                        <Text className="text-white text-[10px] font-bold">8.5</Text>
+                                    </View>
+                                    <View className="flex-row justify-between items-center">
+                                        <Text className="text-[#D9D9D9] text-[10px]">Social Skills</Text>
+                                        <Text className="text-white text-[10px] font-bold">8.4</Text>
+                                    </View>
+                                </View>
+                            </GlassCard>
+                        </View>
+
+                        {/* Work Style */}
+                        <View style={isTablet ? { flex: 1 } : undefined}>
+                            <Text className="text-white font-bold text-sm mb-3">Work Style Preferences</Text>
+                            <GlassCard className="p-5 bg-[#191934]/40 h-full">
+                                <View className="flex-row flex-wrap gap-2">
+                                    {[
+                                        'Remote-First',
+                                        'Async Communication',
+                                        'Collaborative',
+                                        'Autonomous',
+                                        'Result-Oriented',
+                                        'Mentorship-Focused',
+                                    ].map((style, i) => (
+                                        <View
+                                            key={i}
+                                            className="px-3 py-2 rounded-lg bg-[#BB3DF6]/10 border border-[#BB3DF6]/20"
+                                        >
+                                            <Text className="text-[#BB3DF6] text-xs font-medium">
+                                                {style}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </GlassCard>
+                        </View>
                     </View>
                 </View>
             </ScrollView>

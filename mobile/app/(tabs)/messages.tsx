@@ -10,6 +10,7 @@ import {
     Image,
     FlatList,
     Keyboard,
+    useWindowDimensions,
 } from 'react-native';
 import {
     Search,
@@ -26,6 +27,7 @@ import {
     ChevronLeft,
     FileText,
     ArrowRight,
+    MessageSquare,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -114,7 +116,7 @@ const ConversationList = ({
     const insets = useSafeAreaInsets();
 
     return (
-        <View className="flex-1 bg-[#0F0C29]">
+        <View style={{ flex: 1, backgroundColor: '#0F0C29' }}>
             <View className="px-4 pt-4" style={{ paddingTop: insets.top + 16 }}>
                 {/* Header */}
                 <View className="flex-row justify-between items-center mb-5">
@@ -142,9 +144,8 @@ const ConversationList = ({
                         <TouchableOpacity
                             key={tab}
                             onPress={() => setActiveTab(tab.toLowerCase())}
-                            className={`flex-1 py-2.5 rounded-lg items-center ${
-                                activeTab === tab.toLowerCase() ? 'overflow-hidden' : ''
-                            }`}
+                            className={`flex-1 py-2.5 rounded-lg items-center ${activeTab === tab.toLowerCase() ? 'overflow-hidden' : ''
+                                }`}
                         >
                             {activeTab === tab.toLowerCase() ? (
                                 <LinearGradient
@@ -156,9 +157,8 @@ const ConversationList = ({
                                 />
                             ) : null}
                             <Text
-                                className={`text-xs font-semibold ${
-                                    activeTab === tab.toLowerCase() ? 'text-white' : 'text-white/50'
-                                }`}
+                                className={`text-xs font-semibold ${activeTab === tab.toLowerCase() ? 'text-white' : 'text-white/50'
+                                    }`}
                             >
                                 {tab}
                             </Text>
@@ -170,17 +170,17 @@ const ConversationList = ({
             {/* Conversation List */}
             <FlatList
                 data={conversations}
+                style={{ flex: 1 }}
                 keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
+                contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 80 + insets.bottom }}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => onSelectConversation(item)}
-                        className={`p-4 rounded-2xl mb-2.5 border ${
-                            item.status === 'Active'
+                        className={`p-4 rounded-2xl mb-2.5 border ${item.status === 'Active'
                                 ? 'bg-[#4A47A3]/30 border-[#BB3DF6]/20'
                                 : 'bg-[#2A2850]/30 border-white/5'
-                        }`}
+                            }`}
                     >
                         <View className="flex-row items-start gap-3">
                             <View className="relative">
@@ -208,22 +208,20 @@ const ConversationList = ({
                                     {item.lastMessage}
                                 </Text>
                                 <View
-                                    className={`self-start px-2.5 py-1 rounded-md ${
-                                        item.status === 'Active'
+                                    className={`self-start px-2.5 py-1 rounded-md ${item.status === 'Active'
                                             ? 'bg-[#00C2FF]/15'
                                             : item.status === 'Pending'
-                                            ? 'bg-[#BB3DF6]/15'
-                                            : 'bg-[#2954FF]/15'
-                                    }`}
+                                                ? 'bg-[#BB3DF6]/15'
+                                                : 'bg-[#2954FF]/15'
+                                        }`}
                                 >
                                     <Text
-                                        className={`text-[11px] font-semibold ${
-                                            item.status === 'Active'
+                                        className={`text-[11px] font-semibold ${item.status === 'Active'
                                                 ? 'text-[#00C2FF]'
                                                 : item.status === 'Pending'
-                                                ? 'text-[#BB3DF6]'
-                                                : 'text-[#2954FF]'
-                                        }`}
+                                                    ? 'text-[#BB3DF6]'
+                                                    : 'text-[#2954FF]'
+                                            }`}
                                     >
                                         {item.status}
                                     </Text>
@@ -268,9 +266,11 @@ const ConversationList = ({
 const ChatView = ({
     conversation,
     onBack,
+    isTablet,
 }: {
     conversation: Conversation;
-    onBack: () => void;
+    onBack?: () => void;
+    isTablet?: boolean;
 }) => {
     const insets = useSafeAreaInsets();
     const [messageInput, setMessageInput] = useState('');
@@ -296,7 +296,7 @@ const ChatView = ({
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            className="flex-1 bg-[#0F0C29]"
+            style={{ flex: 1, backgroundColor: '#0F0C29' }}
             keyboardVerticalOffset={0}
         >
             {/* Chat Header */}
@@ -306,9 +306,11 @@ const ChatView = ({
             >
                 <View className="flex-row items-center justify-between">
                     <View className="flex-row items-center gap-3 flex-1">
-                        <TouchableOpacity onPress={onBack} className="p-2 -ml-2">
-                            <ChevronLeft size={24} color="white" />
-                        </TouchableOpacity>
+                        {!isTablet && (
+                            <TouchableOpacity onPress={onBack} className="p-2 -ml-2">
+                                <ChevronLeft size={24} color="white" />
+                            </TouchableOpacity>
+                        )}
                         <View className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/10">
                             <Image source={{ uri: conversation.avatar }} className="w-full h-full" />
                         </View>
@@ -342,7 +344,7 @@ const ChatView = ({
             {/* Messages */}
             <ScrollView
                 ref={scrollViewRef}
-                className="flex-1 px-4"
+                style={{ flex: 1, paddingHorizontal: 16 }}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingVertical: 20 }}
                 onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
@@ -357,9 +359,8 @@ const ChatView = ({
                 {messages.map((msg) => (
                     <View
                         key={msg.id}
-                        className={`flex-row items-start gap-3 mb-5 max-w-[85%] ${
-                            msg.sender === 'me' ? 'self-end flex-row-reverse' : 'self-start'
-                        }`}
+                        className={`flex-row items-start gap-3 mb-5 max-w-[85%] ${msg.sender === 'me' ? 'self-end flex-row-reverse' : 'self-start'
+                            }`}
                     >
                         <View className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/10">
                             <Image
@@ -374,11 +375,10 @@ const ChatView = ({
                         </View>
                         <View className="flex-1">
                             <View
-                                className={`p-4 rounded-2xl border border-white/10 ${
-                                    msg.sender === 'me'
+                                className={`p-4 rounded-2xl border border-white/10 ${msg.sender === 'me'
                                         ? 'rounded-tr-sm bg-[#3A3663]/40'
                                         : 'rounded-tl-sm bg-[#3A3663]/50'
-                                }`}
+                                    }`}
                             >
                                 <Text className="text-white/90 text-sm leading-relaxed">{msg.text}</Text>
 
@@ -402,9 +402,8 @@ const ChatView = ({
                                 )}
                             </View>
                             <Text
-                                className={`text-white/30 text-[11px] mt-1.5 ${
-                                    msg.sender === 'me' ? 'text-right' : ''
-                                }`}
+                                className={`text-white/30 text-[11px] mt-1.5 ${msg.sender === 'me' ? 'text-right' : ''
+                                    }`}
                             >
                                 {msg.time}
                             </Text>
@@ -478,6 +477,43 @@ const ChatView = ({
 export default function Messages() {
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
     const [activeTab, setActiveTab] = useState('active');
+    const { width, height } = useWindowDimensions();
+    
+    // Dynamic responsive check that handles rotation
+    const isLandscape = width > height;
+    const isTablet = width > 768 || (isLandscape && width > 600);
+
+    if (isTablet) {
+        return (
+            <View className="flex-1 flex-row bg-[#0F0C29]">
+                {/* Left Side: List */}
+                <View style={{ width: 350, borderRightWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+                    <ConversationList
+                        onSelectConversation={setSelectedConversation}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                    />
+                </View>
+
+                {/* Right Side: Chat or Placeholder */}
+                <View className="flex-1">
+                    {selectedConversation ? (
+                        <ChatView
+                            conversation={selectedConversation}
+                            isTablet={true}
+                        />
+                    ) : (
+                        <View className="flex-1 items-center justify-center">
+                            <View className="w-20 h-20 rounded-full bg-white/5 items-center justify-center mb-4">
+                                <MessageSquare size={40} color="rgba(255,255,255,0.2)" />
+                            </View>
+                            <Text className="text-white/40 text-lg font-medium">Select a conversation</Text>
+                        </View>
+                    )}
+                </View>
+            </View>
+        );
+    }
 
     if (selectedConversation) {
         return (

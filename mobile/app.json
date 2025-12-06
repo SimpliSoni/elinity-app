@@ -15,7 +15,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "backgroundColor": "#0F0C29"
+      "backgroundColor": "#0F0C29",
+      "bundleIdentifier": "com.simplisoni.elinityapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +39,18 @@
     "plugins": [
       "expo-router",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9c3b23ea-75c5-450e-89c5-f1216e542db3"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9c3b23ea-75c5-450e-89c5-f1216e542db3"
+    }
   }
 }

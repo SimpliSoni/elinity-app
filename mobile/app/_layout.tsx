@@ -9,11 +9,22 @@ export default function RootLayout() {
         <SafeAreaProvider>
             <View style={{ flex: 1, backgroundColor: '#0F0C29' }}>
                 <StatusBar style="light" />
-                <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0F0C29' } }}>
-                    <Stack.Screen name="index" options={{ headerShown: false }} />
-                    <Stack.Screen name="login" options={{ headerShown: false }} />
-                    <Stack.Screen name="signup" options={{ headerShown: false }} />
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack 
+                    screenOptions={{ 
+                        headerShown: false, 
+                        contentStyle: { backgroundColor: '#0F0C29' },
+                        animation: 'slide_from_right',
+                    }}
+                >
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="login" />
+                    <Stack.Screen name="signup" />
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="candidate" />
+                    <Stack.Screen name="compare" />
+                    <Stack.Screen name="calendar" />
+                    <Stack.Screen name="tests" />
+                    <Stack.Screen name="analytics" />
                 </Stack>
             </View>
         </SafeAreaProvider>

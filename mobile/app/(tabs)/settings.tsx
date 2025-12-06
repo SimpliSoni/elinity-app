@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Switch, useWindowDimensions } from 'react-native';
 import {
     Settings as SettingsIcon,
     Key,
@@ -58,22 +58,20 @@ const IntegrationCard = ({
                 <View className="flex-row items-center justify-between mb-1">
                     <Text className="text-white font-bold text-base">{name}</Text>
                     <View
-                        className={`px-2 py-1 rounded-full ${
-                            status === 'Success'
+                        className={`px-2 py-1 rounded-full ${status === 'Success'
                                 ? 'bg-[#00FF94]/15'
                                 : status === 'Connected'
-                                ? 'bg-[#00C2FF]/15'
-                                : 'bg-[#BB3DF6]/15'
-                        }`}
+                                    ? 'bg-[#00C2FF]/15'
+                                    : 'bg-[#BB3DF6]/15'
+                            }`}
                     >
                         <Text
-                            className={`text-[10px] font-semibold ${
-                                status === 'Success'
+                            className={`text-[10px] font-semibold ${status === 'Success'
                                     ? 'text-[#00FF94]'
                                     : status === 'Connected'
-                                    ? 'text-[#00C2FF]'
-                                    : 'text-[#BB3DF6]'
-                            }`}
+                                        ? 'text-[#00C2FF]'
+                                        : 'text-[#BB3DF6]'
+                                }`}
                         >
                             {status}
                         </Text>
@@ -111,9 +109,7 @@ const NavItem = ({
     <View>
         <TouchableOpacity
             onPress={onPress}
-            className={`flex-row items-center gap-3 px-4 py-3 rounded-xl mb-1 ${
-                active ? 'overflow-hidden' : ''
-            }`}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 16, paddingHorizontal: 16, paddingVertical: 16, borderRadius: 12, marginBottom: 4, overflow: active ? 'hidden' : 'visible' }}
         >
             {active && (
                 <LinearGradient
@@ -132,21 +128,21 @@ const NavItem = ({
             )}
             <View className="relative z-10">{icon}</View>
             <Text
-                className={`text-sm font-medium relative z-10 flex-1 ${
+                className={`text-base font-medium relative z-10 flex-1 ${
                     active ? 'text-white' : 'text-[#D9D9D9]/80'
-                }`}
+                    }`}
             >
                 {label}
             </Text>
             {active && (
-                <View className="w-2 h-2 bg-white rounded-full relative z-10" />
+                <View className="w-2.5 h-2.5 bg-white rounded-full relative z-10" />
             )}
         </TouchableOpacity>
         {active && subItems && (
-            <View className="ml-8 mb-2">
+            <View style={{ marginLeft: 40, marginBottom: 12 }}>
                 {subItems.map((item, i) => (
-                    <TouchableOpacity key={i} className="py-2">
-                        <Text className="text-[#D9D9D9]/60 text-xs">{item}</Text>
+                    <TouchableOpacity key={i} style={{ paddingVertical: 10 }}>
+                        <Text className="text-[#D9D9D9]/60 text-sm">{item}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -167,11 +163,11 @@ const SettingRow = ({
     enabled?: boolean;
     onToggle?: () => void;
 }) => (
-    <View className="flex-row items-center justify-between py-4 border-b border-white/5">
+    <View className="flex-row items-center justify-between py-5 border-b border-white/5">
         <View className="flex-1 mr-4">
-            <Text className="text-white text-sm font-medium mb-1">{label}</Text>
+            <Text className="text-white text-base font-medium mb-1">{label}</Text>
             {description && (
-                <Text className="text-[#D9D9D9]/50 text-xs">{description}</Text>
+                <Text className="text-[#D9D9D9]/50 text-sm">{description}</Text>
             )}
         </View>
         {hasSwitch ? (
@@ -182,7 +178,7 @@ const SettingRow = ({
                 thumbColor="white"
             />
         ) : (
-            <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+            <ChevronRight size={20} color="rgba(255,255,255,0.4)" />
         )}
     </View>
 );
@@ -196,6 +192,11 @@ export default function Settings() {
         interviews: false,
         weeklyDigest: true,
     });
+    const { width, height } = useWindowDimensions();
+    
+    // Dynamic responsive check that handles rotation
+    const isLandscape = width > height;
+    const isTablet = width > 768 || (isLandscape && width > 600);
 
     const integrations = [
         {
@@ -242,43 +243,43 @@ export default function Settings() {
             case 'account':
                 return (
                     <View>
-                        <Text className="text-white font-bold text-lg mb-4">Account Settings</Text>
-                        <GlassCard className="p-4">
-                            <TouchableOpacity className="flex-row items-center gap-3 py-3 border-b border-white/5">
-                                <User size={20} color="rgba(255,255,255,0.6)" />
+                        <Text className="text-white font-bold text-xl mb-6">Account Settings</Text>
+                        <GlassCard>
+                            <TouchableOpacity className="flex-row items-center gap-4 py-4 border-b border-white/5">
+                                <User size={24} color="rgba(255,255,255,0.6)" />
                                 <View className="flex-1">
-                                    <Text className="text-white text-sm font-medium">
+                                    <Text className="text-white text-base font-medium">
                                         Personal Information
                                     </Text>
-                                    <Text className="text-[#D9D9D9]/50 text-xs">
+                                    <Text className="text-[#D9D9D9]/50 text-sm">
                                         Update your profile details
                                     </Text>
                                 </View>
-                                <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+                                <ChevronRight size={20} color="rgba(255,255,255,0.4)" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="flex-row items-center gap-3 py-3 border-b border-white/5">
-                                <Building2 size={20} color="rgba(255,255,255,0.6)" />
+                            <TouchableOpacity className="flex-row items-center gap-4 py-4 border-b border-white/5">
+                                <Building2 size={24} color="rgba(255,255,255,0.6)" />
                                 <View className="flex-1">
-                                    <Text className="text-white text-sm font-medium">
+                                    <Text className="text-white text-base font-medium">
                                         Company Profile
                                     </Text>
-                                    <Text className="text-[#D9D9D9]/50 text-xs">
+                                    <Text className="text-[#D9D9D9]/50 text-sm">
                                         Manage company information
                                     </Text>
                                 </View>
-                                <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+                                <ChevronRight size={20} color="rgba(255,255,255,0.4)" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="flex-row items-center gap-3 py-3">
-                                <CreditCard size={20} color="rgba(255,255,255,0.6)" />
+                            <TouchableOpacity className="flex-row items-center gap-4 py-4">
+                                <CreditCard size={24} color="rgba(255,255,255,0.6)" />
                                 <View className="flex-1">
-                                    <Text className="text-white text-sm font-medium">
+                                    <Text className="text-white text-base font-medium">
                                         Billing & Plans
                                     </Text>
-                                    <Text className="text-[#D9D9D9]/50 text-xs">
+                                    <Text className="text-[#D9D9D9]/50 text-sm">
                                         Manage subscription and payments
                                     </Text>
                                 </View>
-                                <ChevronRight size={18} color="rgba(255,255,255,0.4)" />
+                                <ChevronRight size={20} color="rgba(255,255,255,0.4)" />
                             </TouchableOpacity>
                         </GlassCard>
                     </View>
@@ -286,23 +287,25 @@ export default function Settings() {
             case 'integrations':
                 return (
                     <View>
-                        <View className="flex-row items-center justify-between mb-4">
-                            <Text className="text-white font-bold text-lg">Integrations</Text>
-                            <TouchableOpacity className="px-3 py-1.5 rounded-lg bg-[#BB3DF6]/20 border border-[#BB3DF6]/30">
-                                <Text className="text-[#BB3DF6] text-xs font-medium">+ Add New</Text>
+                        <View className="flex-row items-center justify-between mb-6">
+                            <Text className="text-white font-bold text-xl">Integrations</Text>
+                            <TouchableOpacity className="px-4 py-2 rounded-lg bg-[#BB3DF6]/20 border border-[#BB3DF6]/30">
+                                <Text className="text-[#BB3DF6] text-sm font-medium">+ Add New</Text>
                             </TouchableOpacity>
                         </View>
-                        {integrations.map((integration, i) => (
-                            <IntegrationCard key={i} {...integration} />
-                        ))}
+                        <View style={{ gap: 16 }}>
+                            {integrations.map((integration, i) => (
+                                <IntegrationCard key={i} {...integration} />
+                            ))}
+                        </View>
                     </View>
                 );
             case 'access-control':
                 return (
                     <View>
-                        <Text className="text-white font-bold text-lg mb-4">Access Control</Text>
-                        <GlassCard className="p-5 mb-4">
-                            <Text className="text-white font-bold text-sm mb-4">Team Members</Text>
+                        <Text className="text-white font-bold text-xl mb-6">Access Control</Text>
+                        <GlassCard style={{ marginBottom: 16 }}>
+                            <Text className="text-white font-bold text-base mb-4">Team Members</Text>
                             {[
                                 { name: 'John Smith', role: 'Admin', email: 'john@company.com' },
                                 { name: 'Sarah Lee', role: 'Recruiter', email: 'sarah@company.com' },
@@ -310,16 +313,16 @@ export default function Settings() {
                             ].map((member, i) => (
                                 <View
                                     key={i}
-                                    className="flex-row items-center justify-between py-3 border-b border-white/5 last:border-b-0"
+                                    className="flex-row items-center justify-between py-4 border-b border-white/5 last:border-b-0"
                                 >
                                     <View>
-                                        <Text className="text-white text-sm font-medium">
+                                        <Text className="text-white text-base font-medium">
                                             {member.name}
                                         </Text>
-                                        <Text className="text-[#D9D9D9]/50 text-xs">{member.email}</Text>
+                                        <Text className="text-[#D9D9D9]/50 text-sm">{member.email}</Text>
                                     </View>
-                                    <View className="px-2 py-1 rounded bg-[#2A2A45]">
-                                        <Text className="text-[#BB3DF6] text-xs font-medium">
+                                    <View className="px-3 py-1.5 rounded bg-[#2A2A45]">
+                                        <Text className="text-[#BB3DF6] text-sm font-medium">
                                             {member.role}
                                         </Text>
                                     </View>
@@ -327,15 +330,15 @@ export default function Settings() {
                             ))}
                         </GlassCard>
                         <TouchableOpacity className="py-4 rounded-xl bg-[#2A2A45] border border-white/5 items-center">
-                            <Text className="text-white font-bold text-sm">Invite Team Member</Text>
+                            <Text className="text-white font-bold text-base">Invite Team Member</Text>
                         </TouchableOpacity>
                     </View>
                 );
             case 'notification':
                 return (
                     <View>
-                        <Text className="text-white font-bold text-lg mb-4">Notifications</Text>
-                        <GlassCard className="p-5">
+                        <Text className="text-white font-bold text-xl mb-6">Notifications</Text>
+                        <GlassCard>
                             <SettingRow
                                 label="New Matches"
                                 description="Get notified when new candidates match your criteria"
@@ -378,51 +381,76 @@ export default function Settings() {
         }
     };
 
+    const renderNavigation = () => (
+        <GlassCard style={{ marginBottom: 24 }}>
+            <NavItem
+                icon={<SettingsIcon size={22} color={activeSection === 'account' ? 'white' : 'rgba(255,255,255,0.6)'} />}
+                label="Account"
+                active={activeSection === 'account'}
+                onPress={() => setActiveSection('account')}
+                subItems={['Account Settings', 'Company Profile', 'Billing & Plans']}
+                activeSection={activeSection}
+            />
+            <NavItem
+                icon={<Key size={22} color={activeSection === 'integrations' ? 'white' : 'rgba(255,255,255,0.6)'} />}
+                label="Integrations"
+                active={activeSection === 'integrations'}
+                onPress={() => setActiveSection('integrations')}
+                subItems={['API Management', 'Slack', 'HR Tools', 'ATS Connectors']}
+                activeSection={activeSection}
+            />
+            <NavItem
+                icon={<Shield size={22} color={activeSection === 'access-control' ? 'white' : 'rgba(255,255,255,0.6)'} />}
+                label="Access Control"
+                active={activeSection === 'access-control'}
+                onPress={() => setActiveSection('access-control')}
+                subItems={['Permissions', 'Recruiters', 'Hiring Managers']}
+                activeSection={activeSection}
+            />
+            <NavItem
+                icon={<Bell size={22} color={activeSection === 'notification' ? 'white' : 'rgba(255,255,255,0.6)'} />}
+                label="Notifications"
+                active={activeSection === 'notification'}
+                onPress={() => setActiveSection('notification')}
+                subItems={['Push Notifications', 'Email Alerts', 'Digest Settings']}
+                activeSection={activeSection}
+            />
+        </GlassCard>
+    );
+
+    if (isTablet) {
+        return (
+            <View className="flex-1 bg-[#0F0C29] flex-row" style={{ paddingTop: insets.top + 16 }}>
+                {/* Left Side: Navigation */}
+                <View style={{ width: 300, paddingHorizontal: 16 }}>
+                    <Text className="text-2xl font-bold text-white mb-6">Settings</Text>
+                    {renderNavigation()}
+                </View>
+
+                {/* Right Side: Content */}
+                <ScrollView
+                    style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 120, paddingHorizontal: 16 }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {renderContent()}
+                </ScrollView>
+            </View>
+        );
+    }
+
     return (
-        <View className="flex-1 bg-[#0F0C29]">
+        <View style={{ flex: 1, backgroundColor: '#0F0C29' }}>
             <ScrollView
-                className="flex-1 px-4"
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 80 + insets.bottom, paddingHorizontal: 16 }}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 100 }}
             >
                 {/* Header */}
                 <Text className="text-2xl font-bold text-white mb-6">Settings</Text>
 
                 {/* Navigation Tabs */}
-                <GlassCard className="p-3 mb-6">
-                    <NavItem
-                        icon={<SettingsIcon size={18} color={activeSection === 'account' ? 'white' : 'rgba(255,255,255,0.6)'} />}
-                        label="Account"
-                        active={activeSection === 'account'}
-                        onPress={() => setActiveSection('account')}
-                        subItems={['Account Settings', 'Company Profile', 'Billing & Plans']}
-                        activeSection={activeSection}
-                    />
-                    <NavItem
-                        icon={<Key size={18} color={activeSection === 'integrations' ? 'white' : 'rgba(255,255,255,0.6)'} />}
-                        label="Integrations"
-                        active={activeSection === 'integrations'}
-                        onPress={() => setActiveSection('integrations')}
-                        subItems={['API Management', 'Slack', 'HR Tools', 'ATS Connectors']}
-                        activeSection={activeSection}
-                    />
-                    <NavItem
-                        icon={<Shield size={18} color={activeSection === 'access-control' ? 'white' : 'rgba(255,255,255,0.6)'} />}
-                        label="Access Control"
-                        active={activeSection === 'access-control'}
-                        onPress={() => setActiveSection('access-control')}
-                        subItems={['Permissions', 'Recruiters', 'Hiring Managers']}
-                        activeSection={activeSection}
-                    />
-                    <NavItem
-                        icon={<Bell size={18} color={activeSection === 'notification' ? 'white' : 'rgba(255,255,255,0.6)'} />}
-                        label="Notifications"
-                        active={activeSection === 'notification'}
-                        onPress={() => setActiveSection('notification')}
-                        subItems={['Push Notifications', 'Email Alerts', 'Digest Settings']}
-                        activeSection={activeSection}
-                    />
-                </GlassCard>
+                {renderNavigation()}
 
                 {/* Content */}
                 {renderContent()}
